@@ -18,14 +18,17 @@ jobs:
       with:
         python-version: '3.11'
     
-    - name: Install uv
-      uses: astral-sh/setup-uv@v3
-    
     - name: Install dependencies
-      run: uv pip install -r requirements.txt
+      run: |
+        pip install uv
+        uv venv
+        source .venv/bin/activate
+        uv pip install -r requirements.txt
     
     - name: Run bot
       env:
         TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
-      run: uv run python bot.py
+      run: |
+        source .venv/bin/activate
+        python bot.py
